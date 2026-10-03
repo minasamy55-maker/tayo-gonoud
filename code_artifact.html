@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طايو جنود المسيح | كنيسة الشهيدة دميانة بالوايلي الكبير</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Cairo & Amiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif']
+                    },
+                    colors: {
+                        coptic: {
+                            gold: '#D4AF37',
+                            darkGold: '#AA820A',
+                            navy: '#0f172a',
+                            royalBlue: '#1e3a8a',
+                            crimson: '#881337',
+                            cardBg: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col bg-slate-100 selection:bg-amber-100 selection:text-amber-900">
+
+    <header class="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-amber-500/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand & Church Identification -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 shadow-md transform hover:rotate-3 transition">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl sm:text-2xl font-black text-amber-400 tracking-wide">أسرة جنود المسيح</h1>
+                            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-bold">مرحلة إعدادي</span>
+                        </div>
+                        <p class="text-xs text-slate-300 font-medium">كنيسة الشهيدة العظيمة دميانة بالوايلي الكبير</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Dynamic per role) -->
+                <nav id="header-nav-links" class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-700/60">
+                    <!-- Injected by JS based on user role -->
+                </nav>
+
+                <!-- Role Status & Authentication Button -->
+                <div class="flex items-center gap-2.5">
+                    <div id="role-indicator-badge" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border">
+                        <!-- Role Badge details -->
+                    </div>
+                    
+                    <button id="role-toggle-btn" onclick="handleRoleSwitchClick()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition">
+                        <i class="fa-solid fa-key"></i>
+                        <span id="role-toggle-text">دخول الخادم</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Bar -->
+        <div id="mobile-nav-bar" class="md:hidden flex border-t border-slate-800 overflow-x-auto px-2 py-1.5 gap-1 text-xs">
+            <!-- Injected by JS based on role -->
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 w-full space-y-6">
+
+        <!-- Role Announcement Banner -->
+        <div id="role-banner" class="rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm shadow-sm transition">
+            <!-- Injected by updateRoleUI() -->
+        </div>
+
+        <section id="view-dashboard" class="space-y-7 block">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400">فرسان إعدادي المسجلين</p>
+                        <h3 id="stat-total-students" class="text-3xl font-black text-slate-800 mt-1">0</h3>
+                        <span class="text-[11px] text-blue-600 font-bold flex items-center gap-1 mt-1">
+                            <i class="fa-solid fa-shield"></i> جنود المسيح دميانة
+                        </span>
+                    </div>
+                    <div class="w-13 h-13 p-3.5 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400">إجمالي رصيد الطايو الممنوح</p>
+                        <h3 id="stat-total-points" class="text-3xl font-black text-amber-500 mt-1">0</h3>
+                        <span class="text-[11px] text-amber-600 font-bold flex items-center gap-1 mt-1">
+                            <i class="fa-solid fa-coins"></i> نقاط الأمانة والالتزام
+                        </span>
+                    </div>
+                    <div class="w-13 h-13 p-3.5 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400">طايو ممنوح هذا الأسبوع</p>
+                        <h3 id="stat-week-points" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                        <span class="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                            <i class="fa-solid fa-church"></i> القداس والمدارس
+                        </span>
+                    </div>
+                    <div class="w-13 h-13 p-3.5 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-sparkles"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400">هدايا تم تسليمها</p>
+                        <h3 id="stat-rewards-claimed" class="text-3xl font-black text-rose-600 mt-1">0</h3>
+                        <span class="text-[11px] text-rose-500 font-bold flex items-center gap-1 mt-1">
+                            <i class="fa-solid fa-gifts"></i> من متجر جنود المسيح
+                        </span>
+                    </div>
+                    <div class="w-13 h-13 p-3.5 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Top 3 Champions of Soldiers of Christ -->
+                <div class="lg:col-span-2 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-6 sm:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden flex flex-col justify-between border border-blue-900/50">
+                    <div class="absolute -right-10 -top-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black border border-amber-500/30">
+                                    <i class="fa-solid fa-cross"></i> فرسان جنود المسيح
+                                </span>
+                                <h2 class="text-2xl font-black mt-2 text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-trophy text-amber-400"></i> لوحة شرف المتميزين
+                                </h2>
+                            </div>
+                            <button onclick="triggerConfetti()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> تحية الأبطال
+                            </button>
+                        </div>
+                        <div id="podium-container" class="grid grid-cols-3 gap-2 sm:gap-4 items-end pt-6 pb-2 text-center">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                    <div class="relative z-10 mt-6 pt-4 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+                        <p class="font-amiri text-base text-amber-200">«فَاشْتَرِكْ أَنْتَ فِي احْتِمَالِ الْمَشَقَّاتِ كَجُنْدِيٍّ صَالِحٍ لِيَسُوعَ الْمَسِيحِ» (2 تي 2: 3)</p>
+                        <span class="text-[11px] text-slate-400">كنيسة الشهيدة دميانة بالوايلي</span>
+                    </div>
+                </div>
+
+                <!-- Mini Activity Feed -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-base">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> أحدث أنشطة الطايو
+                        </h3>
+                        <button onclick="switchTab('history')" class="text-xs text-blue-600 font-bold hover:underline">السجل كامل</button>
+                    </div>
+                    <div id="dashboard-mini-history" class="space-y-3 flex-1 overflow-y-auto max-h-72">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-ranking-star text-amber-500"></i> ترتيب فرسان إعدادي
+                        </h3>
+                        <p class="text-xs text-slate-500">متابعة دقيقة لكل فصول أولى وثانية وثالثة إعدادي</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold text-slate-600">الفصل:</label>
+                        <select id="leaderboard-filter" onchange="renderLeaderboard()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-amber-500 outline-none">
+                            <option value="ALL">جميع فصول إعدادي</option>
+                            <option value="أولى إعدادي">أولى إعدادي</option>
+                            <option value="ثانية إعدادي">ثانية إعدادي</option>
+                            <option value="ثالثة إعدادي">ثالثة إعدادي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="text-xs font-bold text-slate-400 border-b border-slate-100">
+                                <th class="py-3 px-4">المركز</th>
+                                <th class="py-3 px-4">المخدوم</th>
+                                <th class="py-3 px-4">السنة الدراسية</th>
+                                <th class="py-3 px-4">الوسام الروحي</th>
+                                <th class="py-3 px-4">رصيد الطايو</th>
+                                <th class="py-3 px-4 text-center servant-action-cell">إجراءات الخادم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-table-body" class="divide-y divide-slate-100 text-sm">
+                            <!-- Populated with JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-student-portal" class="space-y-6 hidden">
+            <!-- Student Selector Banner -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">مرحباً بك يا بطل جنود المسيح!</h3>
+                        <p class="text-xs text-slate-500">اختر اسمك لمتابعة نقاط طايو التزامك، وتصفح الهدايا المتاحة</p>
+                    </div>
+                </div>
+                <div class="w-full md:w-72">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">اختر اسمك من القائمة:</label>
+                    <select id="student-portal-select" onchange="onStudentPortalSelect(this.value)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Student Profile Hero Card -->
+            <div id="student-portal-card" class="bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-blue-900/60 relative overflow-hidden">
+                <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-right">
+                        <div id="portal-student-avatar" class="w-24 h-24 rounded-3xl bg-amber-400/20 border-2 border-amber-400 flex items-center justify-center text-5xl shadow-lg">
+                            👦
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-center sm:justify-start gap-2">
+                                <h2 id="portal-student-name" class="text-2xl sm:text-3xl font-black text-amber-300">اختر مخدوماً</h2>
+                                <span id="portal-student-rank-badge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">المركز -</span>
+                            </div>
+                            <p id="portal-student-class" class="text-sm text-slate-300 mt-1">أسرة جنود المسيح - كنيسة الشهيدة دميانة</p>
+                            <div class="flex items-center gap-2 mt-3 justify-center sm:justify-start">
+                                <span id="portal-student-medal" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-blue-900/60 text-blue-200 border border-blue-700">
+                                    وسام المحارب الأمين
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Points Counter -->
+                    <div class="text-center bg-white/5 border border-white/10 p-5 rounded-3xl backdrop-blur-sm min-w-[200px]">
+                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block">رصيد الطايو الحالي</span>
+                        <div class="flex items-center justify-center gap-2 my-1">
+                            <i class="fa-solid fa-coins text-amber-400 text-2xl"></i>
+                            <span id="portal-student-points" class="text-4xl font-black text-amber-400">0</span>
+                        </div>
+                        <span class="text-[11px] text-emerald-400 font-semibold">جاهز للاستبدال بالهدايا</span>
+                    </div>
+                </div>
+
+                <!-- Spiritual Goal Progress -->
+                <div class="mt-6 pt-5 border-t border-slate-800 text-xs">
+                    <div class="flex justify-between font-bold text-slate-300 mb-1.5">
+                        <span>التقدم نحو الوسام الذهبي وجائزة إعدادي الكبرى (300 طايو)</span>
+                        <span id="portal-progress-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5">
+                        <div id="portal-progress-bar" class="bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-500" style="width: 10%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Content Tabs: My History & Available Gifts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- My Activity Log -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> سجل أمانتي ونقاطي السابقة
+                    </h3>
+                    <div id="portal-student-history" class="space-y-2.5 max-h-80 overflow-y-auto">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Spiritual Motivation Card -->
+                <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-slate-950/20 text-slate-950 text-xs font-black">شعار جنود المسيح</span>
+                        <h4 class="text-xl font-black mt-3">«كُنْ أَمِينًا إِلَى الْمَوْتِ فَسَأُعْطِيكَ إِكْلِيلَ الْحَيَاةِ»</h4>
+                        <p class="text-xs font-medium text-slate-900 mt-2 leading-relaxed">
+                            يا بطل إعدادي، كل حضور باكر للقداس، وكل اعتراف مع أبونا، وكل آية تحفظها بتركيز في أسرة جنود المسيح بكنيسة الشهيدة دميانة بتضيف لرصيدك الروحي وبتفرح قلب ربنا!
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-900/10 flex items-center justify-between text-xs font-bold">
+                        <span>كنيسة الشهيدة دميانة بالوايلي الكبير</span>
+                        <button onclick="switchTab('market')" class="bg-slate-950 text-amber-400 px-3.5 py-1.5 rounded-xl font-black hover:bg-slate-900 transition">
+                            تصفح هدايا المتجر
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-students" class="space-y-6 hidden">
+            <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex flex-1 items-center gap-3">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="students-search" oninput="renderStudentsList()" placeholder="ابحث باسم المخدوم في إعدادي..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium">
+                    </div>
+                    <select id="students-stage-filter" onchange="renderStudentsList()" class="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs sm:text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none">
+                        <option value="ALL">جميع فصول إعدادي</option>
+                        <option value="أولى إعدادي">أولى إعدادي</option>
+                        <option value="ثانية إعدادي">ثانية إعدادي</option>
+                        <option value="ثالثة إعدادي">ثالثة إعدادي</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 servant-only-element">
+                    <button onclick="openNewStudentModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-4 py-2.5 rounded-2xl text-xs sm:text-sm flex items-center gap-2 shadow-sm transition">
+                        <i class="fa-solid fa-user-plus"></i> إضافة ابن جديد في إعدادي
+                    </button>
+                </div>
+            </div>
+
+            <div id="students-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <section id="view-attendance" class="space-y-6 hidden">
+            <div class="bg-gradient-to-r from-slate-950 to-blue-950 text-white p-6 rounded-3xl shadow-md border border-blue-900/50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">خاص بالخدام</span>
+                            <h2 class="text-2xl font-black">تسجيل طايو يوم الجمعة / الأحد</h2>
+                        </div>
+                        <p class="text-slate-300 text-xs mt-1">رصد درجات القداس، التناول، والاعتراف لأسرة جنود المسيح بكنيسة الشهيدة دميانة بالوايلي</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-2xl border border-slate-700">
+                        <i class="fa-regular fa-calendar text-amber-400"></i>
+                        <input type="date" id="attendance-date" class="bg-transparent text-xs sm:text-sm text-white font-bold outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Student Picker -->
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="font-black text-slate-800 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-user-check text-blue-600"></i> 1. اختر الابن / المخدوم
+                    </h3>
+                    <input type="text" id="selector-search" oninput="filterQuickSelector()" placeholder="ابحث باسم الابن..." class="w-full px-3.5 py-2 mb-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                    <div id="attendance-student-list" class="space-y-2 overflow-y-auto max-h-[460px] pr-1">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Rubric Options -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                            <div>
+                                <h3 class="font-black text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-list-check text-amber-500"></i> 2. بنود الالتزام الروحي والكتابي
+                                </h3>
+                                <p class="text-xs text-slate-400">حدد البنود التي قام بها الابن خلال هذا اليوم</p>
+                            </div>
+                            <span id="selected-student-badge" class="px-3 py-1 bg-amber-50 text-amber-900 font-bold rounded-xl text-xs border border-amber-200">
+                                لم يتم اختيار ابن بعد
+                            </span>
+                        </div>
+
+                        <!-- Checkboxes container -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="points-criteria-container">
+                            <!-- Populated with JS -->
+                        </div>
+
+                        <!-- Custom Note or Bonus -->
+                        <div class="mt-5 p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
+                            <h4 class="text-xs font-bold text-slate-700 mb-2">إضافة طايو إضافي مخصص (اختياري)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <input type="number" id="custom-points-val" placeholder="قيمة إضافية (+ أو -)" class="bg-white px-3 py-2 border border-slate-200 rounded-xl text-xs outline-none">
+                                <input type="text" id="custom-points-reason" placeholder="السبب (مثال: بحث كنسي عن الشهيدة دميانة)" class="sm:col-span-2 bg-white px-3 py-2 border border-slate-200 rounded-xl text-xs outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Button -->
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-slate-600">المجموع المستحق:</span>
+                            <div class="px-3 py-1 rounded-xl bg-amber-500 text-slate-950 font-black text-lg flex items-center gap-1">
+                                <i class="fa-solid fa-coins text-sm"></i>
+                                <span id="calculated-daily-points">0</span>
+                                <span class="text-xs">طايو</span>
+                            </div>
+                        </div>
+
+                        <button onclick="commitDailyPoints()" id="btn-commit-points" disabled class="w-full sm:w-auto px-7 py-2.5 rounded-xl bg-emerald-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-700 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition">
+                            <i class="fa-solid fa-check-double"></i> اعتماد ومنح الطايو للابن
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-market" class="space-y-6 hidden">
+            <!-- Market Hero Banner -->
+            <div class="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <span class="px-3 py-1 rounded-full bg-slate-950/20 text-white text-xs font-black">متجر جوائز إعدادي</span>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-2">متجر هدايا أسرة جنود المسيح</h2>
+                    <p class="text-white/95 text-xs sm:text-sm mt-1 max-w-xl">استبدل نقاط أمانتك وحضورك بهدايا قيمة، كتب مسيحية، صلبان، وميداليات تشجيعية مباركة من كنيسة الشهيدة دميانة بالوايلي الكبير.</p>
+                </div>
+                <div class="flex items-center gap-3 servant-only-element">
+                    <button onclick="openNewRewardModal()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 font-black px-4 py-2.5 rounded-2xl text-xs sm:text-sm flex items-center gap-2 shadow transition">
+                        <i class="fa-solid fa-plus-circle"></i> إضافة هدية جديدة للكتالوج
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="rewards-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <section id="view-history" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> سجل معاملات الطايو
+                        </h3>
+                        <p class="text-xs text-slate-500">توثيق كامل لكل النقاط الممنوحة والاستبدالات في أسرة جنود المسيح</p>
+                    </div>
+                    <div class="flex items-center gap-2 servant-only-element">
+                        <button onclick="clearHistoryConfirm()" class="text-xs text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-xl border border-rose-200 font-bold transition">
+                            <i class="fa-solid fa-trash-can"></i> مسح السجل
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="text-xs font-bold text-slate-400 border-b border-slate-100">
+                                <th class="py-3 px-4">التاريخ والوقت</th>
+                                <th class="py-3 px-4">المخدوم</th>
+                                <th class="py-3 px-4">نوع الحركة</th>
+                                <th class="py-3 px-4">السبب / بنود التقييم</th>
+                                <th class="py-3 px-4">الطايو</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="divide-y divide-slate-100 text-sm">
+                            <!-- Populated with JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-pin-auth" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/20 text-amber-600 flex items-center justify-center text-2xl mb-3">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-black text-lg text-slate-800">بوابة خدام جنود المسيح</h3>
+            <p class="text-xs text-slate-500 mt-1 mb-4">أدخل الرقم السري للخدمة لمنح وتعديل درجات الطايو (الافتراضي: 1234)</p>
+            
+            <form onsubmit="handleServantLogin(event)" class="space-y-4">
+                <input type="password" id="servant-pin-input" maxlength="8" placeholder="••••" class="w-full text-center tracking-widest text-2xl py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none font-mono">
+                <p id="pin-error-msg" class="text-xs font-bold text-rose-600 hidden">الرمز السري غير صحيح، حاول مجدداً</p>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-pin-auth')" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow">دخول الخادم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-student" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 id="modal-student-title" class="font-black text-base text-slate-800">إضافة ابن في أسرة جنود المسيح</h3>
+                <button onclick="closeModal('modal-student')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="saveStudent(event)" class="space-y-3.5 mt-4">
+                <input type="hidden" id="student-edit-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم الابن ثلاثي *</label>
+                    <input type="text" id="student-name" required placeholder="مثال: يوسف إبرام مجدي" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">السنة الدراسية *</label>
+                    <select id="student-stage" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-amber-500 outline-none">
+                        <option value="أولى إعدادي">أولى إعدادي</option>
+                        <option value="ثانية إعدادي">ثانية إعدادي</option>
+                        <option value="ثالثة إعدادي">ثالثة إعدادي</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الصورة الرمزية (Avatar)</label>
+                    <div class="grid grid-cols-6 gap-2 pt-1" id="avatar-picker">
+                        <!-- Populated by JS -->
+                    </div>
+                    <input type="hidden" id="student-avatar" value="👦">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رصيد الطايو المبدئي</label>
+                    <input type="number" id="student-initial-points" value="0" min="0" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رقم تليفون ولي الأمر / ملاحظات خادم الافتقاد</label>
+                    <input type="text" id="student-phone" placeholder="012xxxxxxxx" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                    <button type="button" onclick="closeModal('modal-student')" class="px-3 py-1.5 text-xs font-bold text-slate-500">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow">حفظ البيانات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Quick Modify Points -->
+    <div id="modal-quick-points" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-black text-slate-800 text-sm" id="quick-points-title">تعديل رصيد الطايو</h3>
+                <button onclick="closeModal('modal-quick-points')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="saveQuickPoints(event)" class="space-y-3 mt-4">
+                <input type="hidden" id="quick-student-id">
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="cursor-pointer border rounded-xl p-2 text-center text-xs font-bold has-[:checked]:bg-emerald-50 has-[:checked]:text-emerald-700 has-[:checked]:border-emerald-500">
+                        <input type="radio" name="quick_type" value="add" checked class="hidden">
+                        <i class="fa-solid fa-plus-circle text-emerald-600"></i> مكافأة (+)
+                    </label>
+                    <label class="cursor-pointer border rounded-xl p-2 text-center text-xs font-bold has-[:checked]:bg-rose-50 has-[:checked]:text-rose-700 has-[:checked]:border-rose-500">
+                        <input type="radio" name="quick_type" value="deduct" class="hidden">
+                        <i class="fa-solid fa-minus-circle text-rose-600"></i> خصم (-)
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">النقاط *</label>
+                    <input type="number" id="quick-points-amount" min="1" required value="10" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">السبب *</label>
+                    <input type="text" id="quick-points-desc" required placeholder="مثلاً: تفوق في مسابقة الكتاب المقدس..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div class="pt-3 flex justify-end gap-2 border-t border-slate-100">
+                    <button type="button" onclick="closeModal('modal-quick-points')" class="px-3 py-1.5 text-xs font-bold text-slate-500">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-900 text-white font-bold text-xs rounded-xl shadow">اعتماد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Redeem in Market -->
+    <div id="modal-redeem" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+            <div id="redeem-reward-icon" class="text-4xl mb-2">🎁</div>
+            <h4 id="redeem-reward-name" class="font-black text-slate-800 text-base">اسم الهدية</h4>
+            <p id="redeem-reward-cost" class="text-amber-600 font-black text-sm mt-1">0 نقطة طايو</p>
+            
+            <div id="redeem-servant-area" class="mt-4 text-right">
+                <label class="block text-xs font-bold text-slate-700 mb-1">اختر الابن المستفيد:</label>
+                <select id="redeem-student-select" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <p id="redeem-student-notice" class="mt-3 text-xs text-slate-500 hidden leading-relaxed">
+                أنت في وضع المخدوم. يمكنك إبلاغ خادم الفصل في كنيسة الشهيدة دميانة بالهدية التي تود استبدالها برصيدك!
+            </p>
+
+            <div class="pt-4 mt-4 flex justify-end gap-2 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modal-redeem')" class="px-3 py-1.5 text-xs font-bold text-slate-500">إغلاق</button>
+                <button id="redeem-confirm-btn" type="button" onclick="confirmRedeemReward()" class="px-5 py-2 bg-emerald-600 text-white font-black text-xs rounded-xl shadow">تأكيد الاستبدال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Reward Item (Servant only) -->
+    <div id="modal-reward-item" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-black text-slate-800 text-sm">إضافة هدية جديدة لكتالوج إعدادي</h3>
+                <button onclick="closeModal('modal-reward-item')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="saveNewReward(event)" class="space-y-3 mt-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم الهدية *</label>
+                    <input type="text" id="reward-item-name" required placeholder="مثال: كتاب صلوات الشباب بالأجبية" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">تكلفة الطايو *</label>
+                    <input type="number" id="reward-item-cost" min="5" step="5" required value="50" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الرمز التعبيري (Emoji)</label>
+                    <input type="text" id="reward-item-emoji" value="✝️️" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الكمية المتاحة</label>
+                    <input type="number" id="reward-item-stock" min="1" value="10" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
+                </div>
+                <div class="pt-3 flex justify-end gap-2 border-t border-slate-100">
+                    <button type="button" onclick="closeModal('modal-reward-item')" class="px-3 py-1.5 text-xs font-bold text-slate-500">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow">إضافة للكتالوج</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-certificate" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-amber-50/95 rounded-3xl max-w-2xl w-full p-8 shadow-2xl border-4 border-amber-500 text-center relative overflow-hidden">
+            <button onclick="closeModal('modal-certificate')" class="no-print absolute left-4 top-4 text-slate-500 hover:text-slate-800 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="border-2 border-dashed border-amber-600/40 p-6 rounded-2xl bg-white/70">
+                <div class="w-16 h-16 mx-auto rounded-full bg-amber-500/20 flex items-center justify-center text-amber-600 text-3xl mb-3">
+                    <i class="fa-solid fa-cross"></i>
+                </div>
+                <h2 class="text-2xl font-black text-amber-950 font-cairo">كنيسة الشهيدة العظيمة دميانة بالوايلي الكبير</h2>
+                <h3 class="text-base font-bold text-blue-950 mt-1">خدمة مدارس الأحد - أسرة جنود المسيح (مرحلة إعدادي)</h3>
+                <div class="my-5">
+                    <p class="text-xs text-slate-600 font-medium">تتشرف أسرة الخدمة بتقديم وسام وشهادة التقدير والوفاء للابن المبارك:</p>
+                    <h1 id="cert-student-name" class="text-3xl font-black text-blue-950 my-2 underline decoration-amber-400">اسم المخدوم</h1>
+                    <p class="text-xs text-slate-700 mt-2 leading-relaxed">
+                        تقديراً لأمانته وحضوره المنتظم للقداس الإلهي، وتناوله المستمر واعترافه وحفظه كلمة الله، ورصيده البالغ <span id="cert-points" class="font-black text-amber-600 text-lg">0</span> نقطة طايو في مسيرة «جنود المسيح».
+                    </p>
+                </div>
+                <p class="font-amiri text-lg text-amber-900 mt-3">«فَاشْتَرِكْ أَنْتَ فِي احْتِمَالِ الْمَشَقَّاتِ كَجُنْدِيٍّ صَالِحٍ لِيَسُوعَ الْمَسِيحِ» (2 تي 2: 3)</p>
+                <div class="mt-6 pt-4 border-t border-amber-200 flex justify-between text-xs font-bold text-slate-600 px-4">
+                    <div>كاهن الكنيسة: ...................</div>
+                    <div id="cert-date">التاريخ: 2026</div>
+                    <div>أمين الخدمة: ...................</div>
+                </div>
+            </div>
+            <div class="no-print mt-5 flex justify-center gap-3">
+                <button onclick="window.print()" class="bg-blue-900 text-white font-bold px-6 py-2 rounded-xl text-xs flex items-center gap-2 hover:bg-blue-950 transition shadow">
+                    <i class="fa-solid fa-print"></i> طباعة الشهادة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl border border-slate-700">
+        <span id="toast-icon" class="text-emerald-400 text-lg"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-msg" class="text-xs sm:text-sm font-bold">تم حفظ التغييرات</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-5 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>منظومة طايو أسرة جنود المسيح (إعدادي) © كنيسة الشهيدة دميانة بالوايلي الكبير</p>
+            <p class="text-amber-600 font-bold">«الرب يحفظ دخولكم وخروجكم من الآن وإلى الأبد»</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sunday School rubric adapted for Prep stage
+        const PREP_CRITERIA = [
+            { id: 'liturgy', label: 'حضور القداس الإلهي باكر', points: 15, icon: 'fa-church' },
+            { id: 'communion', label: 'التناول من الأسرار المقدسة', points: 15, icon: 'fa-cross' },
+            { id: 'confession', label: 'سر الاعتراف الدوري مع أب الاعتراف', points: 15, icon: 'fa-heart' },
+            { id: 'ontime', label: 'حضور فصل إعدادي في الميعاد', points: 10, icon: 'fa-clock' },
+            { id: 'verse', label: 'تسميع آية الأسبوع والشاهد', points: 10, icon: 'fa-book-bible' },
+            { id: 'bible_presence', label: 'إحضار الإنجيل الشخصي والنوتبوك', points: 5, icon: 'fa-book-bookmark' },
+            { id: 'behavior', label: 'الوقار والهدوء والسلوك المسيحي', points: 5, icon: 'fa-star' },
+            { id: 'sharing', label: 'التفاعل والمشاركة في مناقشة الموضوع', points: 5, icon: 'fa-comments' },
+            { id: 'hymn', label: 'حفظ اللحن أو الترنيمة المقررة', points: 5, icon: 'fa-music' },
+            { id: 'service_act', label: 'خدمة ونظافة الفصل ومساعدة الزملاء', points: 5, icon: 'fa-hands-holding-child' }
+        ];
+
+        // Sample initial student roster for "جنود المسيح"
+        const INITIAL_STUDENTS = [
+            { id: 's1', name: 'مارك يوسف رمزي', stage: 'أولى إعدادي', points: 195, avatar: '👦', phone: '01223456781' },
+            { id: 's2', name: 'مينا كيرلس فخري', stage: 'ثانية إعدادي', points: 260, avatar: '🧑', phone: '01211223342' },
+            { id: 's3', name: 'بيشوي عاطف نجيب', stage: 'ثالثة إعدادي', points: 310, avatar: '👦', phone: '01278965413' },
+            { id: 's4', name: 'فادي ماجد صبحي', stage: 'أولى إعدادي', points: 140, avatar: '🧒', phone: '01099887764' },
+            { id: 's5', name: 'ديفيد أيمن رفعت', stage: 'ثانية إعدادي', points: 220, avatar: '👦', phone: '01122334455' },
+            { id: 's6', name: 'أنطونيو مدحت مسعود', stage: 'ثالثة إعدادي', points: 175, avatar: '🧑', phone: '01555667786' },
+            { id: 's7', name: 'كيرلس عماد نصيف', stage: 'ثانية إعدادي', points: 280, avatar: '👦', phone: '01011224457' },
+            { id: 's8', name: 'جون سامح توفيق', stage: 'أولى إعدادي', points: 110, avatar: '🧒', phone: '01200112238' }
+        ];
+
+        // Initial gifts for prep students
+        const INITIAL_REWARDS = [
+            { id: 'r1', name: 'أجبية ومزامير الشباب طبعة فاخرة', cost: 45, emoji: '📖', stock: 12 },
+            { id: 'r2', name: 'صليب خشب يدوي مطرز بحبل كنسي', cost: 40, emoji: '✝️', stock: 20 },
+            { id: 'r3', name: 'فلاشة ميموري عليها ألحان ودراسات كتاب', cost: 75, emoji: '💾', stock: 8 },
+            { id: 'r4', name: 'كتاب سير قديسي الوايلي والشهيدة دميانة', cost: 60, emoji: '📕', stock: 10 },
+            { id: 'r5', name: 'مج حراري عليه شعار جنود المسيح', cost: 110, emoji: '☕', stock: 6 },
+            { id: 'r6', name: 'ميدالية الشهيدة دميانة والأربعين عذراء', cost: 25, emoji: '🎖️', stock: 25 }
+        ];
+
+        // Initial sample history
+        const INITIAL_HISTORY = [
+            { id: 'h1', date: new Date().toLocaleDateString('ar-EG'), time: '10:30 ص', studentId: 's3', studentName: 'بيشوي عاطف نجيب', type: 'add', points: 45, reason: 'حضور قداس باكر + تناول + اعتراف' },
+            { id: 'h2', date: new Date().toLocaleDateString('ar-EG'), time: '11:00 ص', studentId: 's2', studentName: 'مينا كيرلس فخري', type: 'add', points: 30, reason: 'قداس باكر + حفظ آية إعدادي الأسبوعية' }
+        ];
+
+        // System State
+        let students = [];
+        let rewards = [];
+        let historyLog = [];
+        let currentRole = 'student'; // 'servant' or 'student'
+        let currentStudentId = null;
+        let selectedStudentForAttendance = null;
+        const SERVANT_PIN = '1234'; // Default PIN for Servants of St. Demiana
+        const AVATARS = ['👦', '🧑', '🧒', '👨', '🎒', '🛡️'];
+
+        function loadState() {
+            try {
+                const storedStudents = localStorage.getItem('demiana_prep_students');
+                students = storedStudents ? JSON.parse(storedStudents) : INITIAL_STUDENTS;
+
+                const storedRewards = localStorage.getItem('demiana_prep_rewards');
+                rewards = storedRewards ? JSON.parse(storedRewards) : INITIAL_REWARDS;
+
+                const storedHistory = localStorage.getItem('demiana_prep_history');
+                historyLog = storedHistory ? JSON.parse(storedHistory) : INITIAL_HISTORY;
+
+                const savedRole = localStorage.getItem('demiana_user_role');
+                currentRole = savedRole === 'servant' ? 'servant' : 'student';
+
+                const savedStudent = localStorage.getItem('demiana_current_student');
+                if (savedStudent && students.some(s => s.id === savedStudent)) {
+                    currentStudentId = savedStudent;
+                } else if (students.length > 0) {
+                    currentStudentId = students[0].id;
+                }
+            } catch (e) {
+                students = INITIAL_STUDENTS;
+                rewards = INITIAL_REWARDS;
+                historyLog = INITIAL_HISTORY;
+                currentRole = 'student';
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('demiana_prep_students', JSON.stringify(students));
+            localStorage.setItem('demiana_prep_rewards', JSON.stringify(rewards));
+            localStorage.setItem('demiana_prep_history', JSON.stringify(historyLog));
+            localStorage.setItem('demiana_user_role', currentRole);
+            if (currentStudentId) {
+                localStorage.setItem('demiana_current_student', currentStudentId);
+            }
+            updateDashboardMetrics();
+        }
+
+        function getBadgeInfo(points) {
+            if (points >= 300) {
+                return { name: 'قائد الفرسان', color: 'from-amber-400 to-amber-600', icon: 'fa-crown', textCol: 'text-amber-800', bgCol: 'bg-amber-100' };
+            } else if (points >= 220) {
+                return { name: 'محارب أمين', color: 'from-blue-500 to-indigo-600', icon: 'fa-shield-halved', textCol: 'text-blue-800', bgCol: 'bg-blue-100' };
+            } else if (points >= 140) {
+                return { name: 'جندي مقدام', color: 'from-emerald-500 to-teal-600', icon: 'fa-medal', textCol: 'text-emerald-800', bgCol: 'bg-emerald-100' };
+            } else {
+                return { name: 'شبل جنود المسيح', color: 'from-slate-400 to-slate-600', icon: 'fa-award', textCol: 'text-slate-800', bgCol: 'bg-slate-200' };
+            }
+        }
+
+        function updateRoleUI() {
+            const navContainer = document.getElementById('header-nav-links');
+            const mobileNav = document.getElementById('mobile-nav-bar');
+            const badge = document.getElementById('role-indicator-badge');
+            const toggleText = document.getElementById('role-toggle-text');
+            const roleBanner = document.getElementById('role-banner');
+
+            if (currentRole === 'servant') {
+                // Servant View
+                badge.className = 'px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 bg-amber-500/20 text-amber-300 border-amber-500/40';
+                badge.innerHTML = '<i class="fa-solid fa-user-shield text-amber-400"></i> وضع الخادم (تحكم كامل)';
+                toggleText.textContent = 'خروج لوضع المخدوم';
+
+                roleBanner.className = 'rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-gradient-to-r from-blue-950 to-slate-900 text-white border border-amber-500/40 shadow-sm';
+                roleBanner.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <div>
+                            <span class="font-black text-amber-400">أهلاً بك يا خادم أسرة جنود المسيح</span>
+                            <p class="text-xs text-slate-300">أنت في وضع الخادم المعتمد: يمكنك تسجيل حضور الجمعة/الأحد، تعديل النقاط، وإدارة الهدايا.</p>
+                        </div>
+                    </div>
+                    <button onclick="switchRoleToStudent()" class="text-xs font-bold bg-white/10 hover:bg-white/20 text-slate-200 px-3 py-1.5 rounded-xl transition">
+                        تجربة شاشة المخدوم
+                    </button>
+                `;
+
+                // Render Full Navigation for Servants
+                navContainer.innerHTML = `
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-pie"></i> لوحة التحكم
+                    </button>
+                    <button onclick="switchTab('attendance')" id="nav-attendance" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-clipboard-check"></i> تسجيل اليوم
+                    </button>
+                    <button onclick="switchTab('students')" id="nav-students" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> المخدومين
+                    </button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-store"></i> متجر الهدايا
+                    </button>
+                    <button onclick="switchTab('history')" id="nav-history" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left"></i> السجل
+                    </button>
+                `;
+
+                mobileNav.innerHTML = `
+                    <button onclick="switchTab('dashboard')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-amber-400">الرئيسية</button>
+                    <button onclick="switchTab('attendance')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">التسجيل</button>
+                    <button onclick="switchTab('students')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">الأولاد</button>
+                    <button onclick="switchTab('market')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">المتجر</button>
+                    <button onclick="switchTab('history')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">السجل</button>
+                `;
+
+                // Show servant elements
+                document.querySelectorAll('.servant-only-element').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.servant-action-cell').forEach(el => el.classList.remove('hidden'));
+
+            } else {
+                // Student View
+                badge.className = 'px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 bg-blue-500/20 text-blue-300 border-blue-500/40';
+                badge.innerHTML = '<i class="fa-solid fa-user-graduate text-blue-400"></i> وضع المخدوم (عرض فقط)';
+                toggleText.textContent = 'دخول الخادم';
+
+                roleBanner.className = 'rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold shadow-sm';
+                roleBanner.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-8 h-8 rounded-xl bg-slate-950 text-amber-400 flex items-center justify-center font-black">
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </span>
+                        <div>
+                            <span class="font-black text-slate-950 text-sm">مرحباً يا بطل أسرة جنود المسيح!</span>
+                            <p class="text-xs text-slate-900 font-medium">أنت تتصفح كنقاط مخدوم: يمكنك رؤية رصيدك، ترتيبك، وهدايا المتجر بدون تعديل النقاط.</p>
+                        </div>
+                    </div>
+                    <button onclick="openModal('modal-pin-auth')" class="text-xs font-black bg-slate-950 hover:bg-slate-900 text-amber-400 px-3.5 py-1.5 rounded-xl transition">
+                        أنا خادم في الأسرة
+                    </button>
+                `;
+
+                // Student Navigation (Simplified)
+                navContainer.innerHTML = `
+                    <button onclick="switchTab('student-portal')" id="nav-student-portal" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-id-card"></i> بطاقتي ونقاطي
+                    </button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-trophy"></i> لوحة الشرف
+                    </button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-gift"></i> متجر الهدايا
+                    </button>
+                `;
+
+                mobileNav.innerHTML = `
+                    <button onclick="switchTab('student-portal')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-amber-400">بطاقتي</button>
+                    <button onclick="switchTab('dashboard')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">لوحة الشرف</button>
+                    <button onclick="switchTab('market')" class="flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-slate-300">الهدايا</button>
+                `;
+
+                // Hide servant elements
+                document.querySelectorAll('.servant-only-element').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.servant-action-cell').forEach(el => el.classList.add('hidden'));
+            }
+        }
+
+        function handleRoleSwitchClick() {
+            if (currentRole === 'servant') {
+                switchRoleToStudent();
+            } else {
+                document.getElementById('servant-pin-input').value = '';
+                document.getElementById('pin-error-msg').classList.add('hidden');
+                openModal('modal-pin-auth');
+            }
+        }
+
+        function handleServantLogin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('servant-pin-input').value.trim();
+            if (pin === SERVANT_PIN) {
+                currentRole = 'servant';
+                saveState();
+                closeModal('modal-pin-auth');
+                updateRoleUI();
+                switchTab('dashboard');
+                showToast('مرحباً بك يا خادم أسرة جنود المسيح، تم تفعيل كافة الصلاحيات', 'success');
+            } else {
+                document.getElementById('pin-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function switchRoleToStudent() {
+            currentRole = 'student';
+            saveState();
+            updateRoleUI();
+            switchTab('student-portal');
+            showToast('تم التحويل إلى وضع المخدوم بنجاح', 'info');
+        }
+
+        function switchTab(tabId) {
+            const allTabs = ['dashboard', 'students', 'attendance', 'market', 'history', 'student-portal'];
+            
+            // Security check: if student attempts servant tab, redirect to portal
+            if (currentRole === 'student' && ['attendance', 'students'].includes(tabId)) {
+                tabId = 'student-portal';
+                showToast('هذا القسم مخصص للخدام فقط', 'error');
+            }
+
+            allTabs.forEach(t => {
+                const section = document.getElementById(`view-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    if (section) {
+                        section.classList.remove('hidden');
+                        section.classList.add('block');
+                    }
+                    if (navBtn) {
+                        navBtn.classList.remove('text-slate-300');
+                        navBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow');
+                    }
+                } else {
+                    if (section) {
+                        section.classList.remove('block');
+                        section.classList.add('hidden');
+                    }
+                    if (navBtn) {
+                        navBtn.classList.remove('bg-amber-500', 'text-slate-950', 'shadow');
+                        navBtn.classList.add('text-slate-300');
+                    }
+                }
+            });
+
+            if (tabId === 'dashboard') renderDashboard();
+            if (tabId === 'student-portal') renderStudentPortal();
+            if (tabId === 'students') renderStudentsList();
+            if (tabId === 'attendance') setupAttendanceTab();
+            if (tabId === 'market') renderMarketRewards();
+            if (tabId === 'history') renderHistoryTable();
+        }
+
+        function updateDashboardMetrics() {
+            const totalPoints = students.reduce((sum, s) => sum + (s.points || 0), 0);
+            const totalStudentsEl = document.getElementById('stat-total-students');
+            const totalPointsEl = document.getElementById('stat-total-points');
+            const weekPointsEl = document.getElementById('stat-week-points');
+            const claimedRewardsEl = document.getElementById('stat-rewards-claimed');
+
+            if (totalStudentsEl) totalStudentsEl.textContent = students.length;
+            if (totalPointsEl) totalPointsEl.textContent = totalPoints.toLocaleString('ar-EG');
+            
+            const weekTotal = historyLog
+                .filter(h => h.type === 'add')
+                .reduce((sum, h) => sum + (h.points || 0), 0);
+            if (weekPointsEl) weekPointsEl.textContent = weekTotal.toLocaleString('ar-EG');
+
+            const redemptions = historyLog.filter(h => h.type === 'redeem').length;
+            if (claimedRewardsEl) claimedRewardsEl.textContent = redemptions;
+        }
+
+        function renderDashboard() {
+            updateDashboardMetrics();
+            renderPodium();
+            renderLeaderboard();
+            renderDashboardMiniHistory();
+        }
+
+        function renderPodium() {
+            const sorted = [...students].sort((a, b) => b.points - a.points);
+            const podiumEl = document.getElementById('podium-container');
+            if (!podiumEl) return;
+
+            if (sorted.length === 0) {
+                podiumEl.innerHTML = '<p class="text-xs text-slate-400 col-span-3">لا توجد بيانات حالياً</p>';
+                return;
+            }
+
+            const first = sorted[0];
+            const second = sorted[1] || null;
+            const third = sorted[2] || null;
+
+            podiumEl.innerHTML = `
+                <!-- 2nd place -->
+                <div class="flex flex-col items-center">
+                    ${second ? `
+                        <div class="text-3xl mb-1">${second.avatar}</div>
+                        <span class="text-xs font-bold text-slate-200 truncate max-w-[95px]">${second.name}</span>
+                        <span class="text-[11px] text-amber-300 font-extrabold">${second.points} طايو</span>
+                        <div class="w-full bg-slate-900/90 border-t-2 border-slate-400 rounded-t-xl h-24 flex flex-col items-center justify-center mt-2 shadow">
+                            <i class="fa-solid fa-medal text-slate-300 text-xl"></i>
+                            <span class="text-[10px] text-slate-300 mt-1">${second.stage}</span>
+                        </div>
+                    ` : '<div class="h-24"></div>'}
+                </div>
+
+                <!-- 1st place -->
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <i class="fa-solid fa-crown text-amber-400 text-xl absolute -top-4 left-1/2 -translate-x-1/2 animate-bounce"></i>
+                        <div class="text-4xl mb-1">${first.avatar}</div>
+                    </div>
+                    <span class="text-xs sm:text-sm font-black text-amber-300 truncate max-w-[120px]">${first.name}</span>
+                    <span class="text-xs text-white font-extrabold bg-amber-500/30 px-2.5 py-0.5 rounded-full border border-amber-400/50">${first.points} طايو</span>
+                    <div class="w-full bg-gradient-to-t from-amber-500/30 to-amber-500/10 border-t-4 border-amber-400 rounded-t-2xl h-36 flex flex-col items-center justify-center mt-2 shadow-lg">
+                        <i class="fa-solid fa-trophy text-amber-400 text-3xl"></i>
+                        <span class="text-xs font-black text-amber-200 mt-1">بطل جنود المسيح</span>
+                        <span class="text-[10px] text-slate-300">${first.stage}</span>
+                    </div>
+                </div>
+
+                <!-- 3rd place -->
+                <div class="flex flex-col items-center">
+                    ${third ? `
+                        <div class="text-3xl mb-1">${third.avatar}</div>
+                        <span class="text-xs font-bold text-slate-200 truncate max-w-[95px]">${third.name}</span>
+                        <span class="text-[11px] text-amber-400 font-extrabold">${third.points} طايو</span>
+                        <div class="w-full bg-slate-900/90 border-t-2 border-amber-700 rounded-t-xl h-20 flex flex-col items-center justify-center mt-2 shadow">
+                            <i class="fa-solid fa-award text-amber-600 text-lg"></i>
+                            <span class="text-[10px] text-slate-300 mt-1">${third.stage}</span>
+                        </div>
+                    ` : '<div class="h-20"></div>'}
+                </div>
+            `;
+        }
+
+        function renderLeaderboard() {
+            const filterVal = document.getElementById('leaderboard-filter')?.value || 'ALL';
+            let list = [...students];
+            if (filterVal !== 'ALL') {
+                list = list.filter(s => s.stage === filterVal);
+            }
+            list.sort((a, b) => b.points - a.points);
+
+            const tbody = document.getElementById('leaderboard-table-body');
+            if (!tbody) return;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">لا يوجد مخدومين في هذا الفصل</td></tr>`;
+                return;
+            }
+
+            const isServant = currentRole === 'servant';
+
+            tbody.innerHTML = list.map((st, idx) => {
+                const badge = getBadgeInfo(st.points);
+                let rankIcon = `<span class="font-bold text-slate-400">${idx + 1}</span>`;
+                if (idx === 0) rankIcon = `<i class="fa-solid fa-trophy text-amber-500 text-base"></i>`;
+                if (idx === 1) rankIcon = `<i class="fa-solid fa-medal text-slate-400 text-base"></i>`;
+                if (idx === 2) rankIcon = `<i class="fa-solid fa-award text-amber-700 text-base"></i>`;
+
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 font-bold text-center w-12">${rankIcon}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">${st.avatar}</span>
+                                <div>
+                                    <span class="font-bold text-slate-800 block text-xs sm:text-sm">${st.name}</span>
+                                    <span class="text-[11px] text-slate-400">أسرة جنود المسيح</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-xs font-semibold text-slate-600">${st.stage}</td>
+                        <td class="py-3 px-4">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${badge.bgCol} ${badge.textCol}">
+                                <i class="fa-solid ${badge.icon}"></i> ${badge.name}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="font-black text-amber-600 text-sm sm:text-base flex items-center gap-1">
+                                <i class="fa-solid fa-coins text-xs"></i> ${st.points}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-center servant-action-cell ${isServant ? '' : 'hidden'}">
+                            <div class="flex items-center justify-center gap-1">
+                                <button onclick="openQuickPointsModal('${st.id}')" title="تعديل الطايو" class="p-1.5 text-blue-700 hover:bg-blue-50 rounded-lg transition">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="showCertificate('${st.id}')" title="شهادة تقدير كنسية" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition">
+                                    <i class="fa-solid fa-award"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderDashboardMiniHistory() {
+            const container = document.getElementById('dashboard-mini-history');
+            if (!container) return;
+
+            const recent = historyLog.slice(0, 5);
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">لا توجد حركات مسجلة</p>';
+                return;
+            }
+
+            container.innerHTML = recent.map(h => {
+                const isAdd = h.type === 'add';
+                return `
+                    <div class="flex items-center justify-between p-2 rounded-2xl bg-slate-50 border border-slate-100 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg flex items-center justify-center ${isAdd ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                                <i class="fa-solid ${isAdd ? 'fa-plus' : 'fa-minus'} text-[10px]"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-slate-800 text-[11px]">${h.studentName}</p>
+                                <p class="text-[10px] text-slate-400 truncate max-w-[140px]">${h.reason}</p>
+                            </div>
+                        </div>
+                        <div class="text-left font-black ${isAdd ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${isAdd ? '+' : '-'}${h.points}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderStudentPortal() {
+            const selectEl = document.getElementById('student-portal-select');
+            if (!selectEl) return;
+
+            // Populate selector
+            selectEl.innerHTML = students.map(s => `
+                <option value="${s.id}" ${s.id === currentStudentId ? 'selected' : ''}>${s.name} (${s.stage})</option>
+            `).join('');
+
+            const student = students.find(s => s.id === currentStudentId) || students[0];
+            if (!student) return;
+
+            currentStudentId = student.id;
+
+            // Determine ranking
+            const sorted = [...students].sort((a, b) => b.points - a.points);
+            const rank = sorted.findIndex(s => s.id === student.id) + 1;
+            const badge = getBadgeInfo(student.points);
+
+            document.getElementById('portal-student-name').textContent = student.name;
+            document.getElementById('portal-student-avatar').textContent = student.avatar || '👦';
+            document.getElementById('portal-student-class').textContent = `${student.stage} | أسرة جنود المسيح - دميانة الوايلي`;
+            document.getElementById('portal-student-rank-badge').textContent = `المركز ${rank} في إعدادي`;
+            document.getElementById('portal-student-points').textContent = student.points;
+            
+            const medalEl = document.getElementById('portal-student-medal');
+            medalEl.className = `px-3 py-1 rounded-xl text-xs font-black flex items-center gap-1.5 ${badge.bgCol} ${badge.textCol}`;
+            medalEl.innerHTML = `<i class="fa-solid ${badge.icon}"></i> ${badge.name}`;
+
+            // Calculate progress to 300 points
+            const target = 300;
+            const progress = Math.min(100, Math.round((student.points / target) * 100));
+            document.getElementById('portal-progress-percent').textContent = `${progress}%`;
+            document.getElementById('portal-progress-bar').style.width = `${progress}%`;
+
+            // Personal History Log
+            const historyContainer = document.getElementById('portal-student-history');
+            const myHistory = historyLog.filter(h => h.studentId === student.id);
+
+            if (myHistory.length === 0) {
+                historyContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">لم يتم تسجيل نقاط سابقة بعد، التزم مع الخادم الجمعة القادمة!</p>';
+            } else {
+                historyContainer.innerHTML = myHistory.map(h => {
+                    const isAdd = h.type === 'add';
+                    return `
+                        <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs">
+                            <div>
+                                <span class="font-bold text-slate-800 block">${h.reason}</span>
+                                <span class="text-[10px] text-slate-400">${h.date} - ${h.time}</span>
+                            </div>
+                            <span class="font-black ${isAdd ? 'text-emerald-600' : 'text-rose-600'}">
+                                ${isAdd ? '+' : '-'}${h.points} طايو
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function onStudentPortalSelect(id) {
+            currentStudentId = id;
+            saveState();
+            renderStudentPortal();
+        }
+
+        function renderStudentsList() {
+            const query = (document.getElementById('students-search')?.value || '').toLowerCase().trim();
+            const filterStage = document.getElementById('students-stage-filter')?.value || 'ALL';
+
+            let list = students.filter(s => {
+                const matchesQuery = s.name.toLowerCase().includes(query) || (s.phone && s.phone.includes(query));
+                const matchesStage = filterStage === 'ALL' || s.stage === filterStage;
+                return matchesQuery && matchesStage;
+            });
+
+            const grid = document.getElementById('students-grid');
+            if (!grid) return;
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400">
+                        <i class="fa-solid fa-user-slash text-4xl mb-3"></i>
+                        <p class="font-bold">لم يتم العثور على مخدوم يطابق البحث في إعدادي</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const isServant = currentRole === 'servant';
+
+            grid.innerHTML = list.map(st => {
+                const badge = getBadgeInfo(st.points);
+                return `
+                    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-3xl border border-amber-200">
+                                    ${st.avatar}
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-slate-800 text-xs sm:text-sm">${st.name}</h4>
+                                    <span class="text-[11px] text-blue-700 font-bold block">${st.stage}</span>
+                                    <span class="text-[10px] text-slate-400">${st.phone || 'بدون هاتف مسجل'}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1 servant-only-element ${isServant ? '' : 'hidden'}">
+                                <button onclick="editStudentModal('${st.id}')" class="p-1.5 text-slate-400 hover:text-blue-700 rounded-lg transition" title="تعديل">
+                                    <i class="fa-solid fa-user-pen text-xs"></i>
+                                </button>
+                                <button onclick="deleteStudentConfirm('${st.id}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg transition" title="حذف">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-slate-400 font-bold block">رصيد الطايو</span>
+                                <span class="text-xl font-black text-amber-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-coins text-xs"></i> ${st.points}
+                                </span>
+                            </div>
+                            <div class="text-left">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${badge.bgCol} ${badge.textCol}">
+                                    <i class="fa-solid ${badge.icon}"></i> ${badge.name}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 gap-2">
+                            ${isServant ? `
+                                <button onclick="openQuickPointsModal('${st.id}')" class="w-full bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-plus-minus text-xs"></i> تعديل
+                                </button>
+                            ` : ''}
+                            <button onclick="showCertificate('${st.id}')" class="w-full ${isServant ? '' : 'col-span-2'} bg-blue-50 hover:bg-blue-900 hover:text-white text-blue-900 py-1.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-certificate text-xs"></i> شهادة تقدير
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setupAttendanceTab() {
+            const dateInput = document.getElementById('attendance-date');
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+
+            renderAttendanceStudentPicker();
+            renderCriteriaRubrics();
+            calculateDailyPointsTotal();
+        }
+
+        function renderAttendanceStudentPicker() {
+            const listEl = document.getElementById('attendance-student-list');
+            if (!listEl) return;
+
+            const searchVal = (document.getElementById('selector-search')?.value || '').toLowerCase().trim();
+            const filtered = students.filter(s => s.name.toLowerCase().includes(searchVal));
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<p class="text-xs text-slate-400 py-4 text-center">لا يوجد طلاب مطابقين في إعدادي</p>';
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(st => {
+                const isSelected = selectedStudentForAttendance && selectedStudentForAttendance.id === st.id;
+                return `
+                    <div onclick="selectStudentForAttendance('${st.id}')" class="p-2.5 rounded-2xl cursor-pointer border transition flex items-center justify-between ${isSelected ? 'bg-amber-50 border-amber-500 text-amber-950 font-black shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-700'}">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">${st.avatar}</span>
+                            <div>
+                                <p class="text-xs font-bold leading-tight">${st.name}</p>
+                                <p class="text-[10px] text-slate-500">${st.stage}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-black text-amber-600">${st.points} طايو</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterQuickSelector() {
+            renderAttendanceStudentPicker();
+        }
+
+        function selectStudentForAttendance(id) {
+            selectedStudentForAttendance = students.find(s => s.id === id);
+            const badgeEl = document.getElementById('selected-student-badge');
+            const commitBtn = document.getElementById('btn-commit-points');
+
+            if (selectedStudentForAttendance) {
+                badgeEl.textContent = `المختار: ${selectedStudentForAttendance.name} (${selectedStudentForAttendance.points} طايو)`;
+                badgeEl.className = 'px-3 py-1 bg-emerald-100 text-emerald-900 font-bold rounded-xl text-xs border border-emerald-300';
+                commitBtn.removeAttribute('disabled');
+            } else {
+                badgeEl.textContent = 'لم يتم اختيار ابن بعد';
+                badgeEl.className = 'px-3 py-1 bg-amber-50 text-amber-900 font-bold rounded-xl text-xs border border-amber-200';
+                commitBtn.setAttribute('disabled', 'true');
+            }
+
+            renderAttendanceStudentPicker();
+        }
+
+        function renderCriteriaRubrics() {
+            const container = document.getElementById('points-criteria-container');
+            if (!container) return;
+
+            container.innerHTML = PREP_CRITERIA.map(item => `
+                <label class="cursor-pointer border border-slate-200 hover:border-amber-400 rounded-2xl p-2.5 flex items-center justify-between transition bg-white has-[:checked]:bg-amber-50 has-[:checked]:border-amber-500 shadow-sm">
+                    <div class="flex items-center gap-2.5">
+                        <input type="checkbox" value="${item.points}" data-id="${item.id}" data-desc="${item.label}" onchange="calculateDailyPointsTotal()" class="rubric-checkbox w-4 h-4 text-amber-600 rounded focus:ring-amber-500">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">${item.label}</span>
+                            <span class="text-[10px] text-slate-400"><i class="fa-solid ${item.icon}"></i> بند التزام</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg">+${item.points}</span>
+                </label>
+            `).join('');
+
+            const customInput = document.getElementById('custom-points-val');
+            if (customInput) customInput.oninput = calculateDailyPointsTotal;
+        }
+
+        function calculateDailyPointsTotal() {
+            const checkboxes = document.querySelectorAll('.rubric-checkbox:checked');
+            let total = 0;
+            checkboxes.forEach(cb => {
+                total += parseInt(cb.value, 10);
+            });
+
+            const customVal = parseInt(document.getElementById('custom-points-val')?.value, 10) || 0;
+            total += customVal;
+
+            const calcEl = document.getElementById('calculated-daily-points');
+            if (calcEl) calcEl.textContent = total;
+            return total;
+        }
+
+        function commitDailyPoints() {
+            if (!selectedStudentForAttendance) {
+                showToast('يرجى اختيار مخدوم أولاً', 'error');
+                return;
+            }
+
+            const total = calculateDailyPointsTotal();
+            if (total === 0) {
+                showToast('يرجى اختيار بند واحد على الأقل لمنح النقاط', 'error');
+                return;
+            }
+
+            const checkedDescs = Array.from(document.querySelectorAll('.rubric-checkbox:checked')).map(cb => cb.dataset.desc);
+            const customReason = document.getElementById('custom-points-reason').value.trim();
+            if (customReason) {
+                checkedDescs.push(customReason);
+            }
+
+            const combinedDesc = checkedDescs.join(' + ') || 'التزام مدارس الأحد والقداس';
+            const attDate = document.getElementById('attendance-date').value || new Date().toISOString().split('T')[0];
+
+            selectedStudentForAttendance.points = (selectedStudentForAttendance.points || 0) + total;
+
+            historyLog.unshift({
+                id: 'h_' + Date.now(),
+                date: attDate,
+                time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+                studentId: selectedStudentForAttendance.id,
+                studentName: selectedStudentForAttendance.name,
+                type: total >= 0 ? 'add' : 'deduct',
+                points: Math.abs(total),
+                reason: combinedDesc
+            });
+
+            saveState();
+            triggerConfetti();
+            showToast(`تمت إضافة ${total} طايو لـ ${selectedStudentForAttendance.name} بنجاح!`, 'success');
+
+            // Reset
+            document.querySelectorAll('.rubric-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('custom-points-val').value = '';
+            document.getElementById('custom-points-reason').value = '';
+            calculateDailyPointsTotal();
+            selectStudentForAttendance(selectedStudentForAttendance.id);
+        }
+
+        function renderMarketRewards() {
+            const grid = document.getElementById('rewards-grid');
+            if (!grid) return;
+
+            if (rewards.length === 0) {
+                grid.innerHTML = '<p class="text-xs text-slate-400 col-span-full py-8 text-center">لا توجد هدايا متاحة في المتجر حالياً</p>';
+                return;
+            }
+
+            const isServant = currentRole === 'servant';
+
+            grid.innerHTML = rewards.map(r => `
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div class="text-center pt-2">
+                        <div class="text-5xl mb-3 transform hover:scale-110 transition duration-200 inline-block">${r.emoji}</div>
+                        <h4 class="font-black text-slate-800 text-sm sm:text-base">${r.name}</h4>
+                        <div class="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-black text-xs border border-amber-200">
+                            <i class="fa-solid fa-coins text-amber-500"></i> ${r.cost} طايو
+                        </div>
+                    </div>
+
+                    <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                        <span>المتبقي: <strong class="text-slate-800">${r.stock}</strong></span>
+                        <button onclick="openRedeemModal('${r.id}')" ${r.stock <= 0 ? 'disabled' : ''} class="bg-blue-900 hover:bg-blue-950 disabled:bg-slate-300 text-white font-bold px-3 py-1.5 rounded-xl transition shadow text-xs">
+                            ${isServant ? 'استبدال الآن' : 'طلب الهدية'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let activeRewardForRedemption = null;
+
+        function openRedeemModal(rewardId) {
+            const reward = rewards.find(r => r.id === rewardId);
+            if (!reward || reward.stock <= 0) return;
+
+            activeRewardForRedemption = reward;
+            document.getElementById('redeem-reward-name').textContent = reward.name;
+            document.getElementById('redeem-reward-icon').textContent = reward.emoji;
+            document.getElementById('redeem-reward-cost').textContent = `${reward.cost} نقطة طايو`;
+
+            const selectEl = document.getElementById('redeem-student-select');
+            const servantArea = document.getElementById('redeem-servant-area');
+            const studentNotice = document.getElementById('redeem-student-notice');
+            const confirmBtn = document.getElementById('redeem-confirm-btn');
+
+            if (currentRole === 'servant') {
+                servantArea.classList.remove('hidden');
+                studentNotice.classList.add('hidden');
+                confirmBtn.classList.remove('hidden');
+
+                const qualifiedStudents = students.filter(s => s.points >= reward.cost);
+                if (qualifiedStudents.length === 0) {
+                    selectEl.innerHTML = '<option value="">لا يوجد مخدوم يمتلك رصيداً كافياً لهذه الهدية</option>';
+                } else {
+                    selectEl.innerHTML = qualifiedStudents.map(s => `
+                        <option value="${s.id}">${s.name} - (رصيده: ${s.points} طايو)</option>
+                    `).join('');
+                }
+            } else {
+                // In student view: show personal notice and eligibility
+                servantArea.classList.add('hidden');
+                studentNotice.classList.remove('hidden');
+                const student = students.find(s => s.id === currentStudentId);
+                if (student && student.points >= reward.cost) {
+                    studentNotice.innerHTML = `
+                        <span class="text-emerald-700 font-bold block mb-1">رصيدك كافٍ! (${student.points} طايو)</span>
+                        أخبر خادم الفصل يوم الجمعة بأنك ترغب في استبدال هدية: <strong>${reward.name}</strong>.
+                    `;
+                    confirmBtn.classList.add('hidden');
+                } else {
+                    studentNotice.innerHTML = `
+                        <span class="text-rose-600 font-bold block mb-1">تحتاج إلى المزيد من نقاط الطايو</span>
+                        رصيدك الحالي هو <strong>${student ? student.points : 0} طايو</strong>. تكلفتها <strong>${reward.cost} طايو</strong>. حافظ على أمانتك لتصل إليها قريباً!
+                    `;
+                    confirmBtn.classList.add('hidden');
+                }
+            }
+
+            openModal('modal-redeem');
+        }
+
+        function confirmRedeemReward() {
+            if (!activeRewardForRedemption) return;
+            const studentId = document.getElementById('redeem-student-select').value;
+            if (!studentId) {
+                showToast('يرجى اختيار مخدوم يمتلك الرصيد الكافي', 'error');
+                return;
+            }
+
+            const student = students.find(s => s.id === studentId);
+            if (!student || student.points < activeRewardForRedemption.cost) {
+                showToast('رصيد المخدوم غير كافٍ للاستبدال', 'error');
+                return;
+            }
+
+            student.points -= activeRewardForRedemption.cost;
+            activeRewardForRedemption.stock = Math.max(0, activeRewardForRedemption.stock - 1);
+
+            historyLog.unshift({
+                id: 'h_' + Date.now(),
+                date: new Date().toLocaleDateString('ar-EG'),
+                time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+                studentId: student.id,
+                studentName: student.name,
+                type: 'redeem',
+                points: activeRewardForRedemption.cost,
+                reason: `استبدال هدية: ${activeRewardForRedemption.name} ${activeRewardForRedemption.emoji}`
+            });
+
+            saveState();
+            closeModal('modal-redeem');
+            renderMarketRewards();
+            triggerConfetti();
+            showToast(`مبروك! تسلّم ${student.name} هدية ${activeRewardForRedemption.name}`, 'success');
+        }
+
+        function openNewRewardModal() {
+            document.getElementById('reward-item-name').value = '';
+            document.getElementById('reward-item-cost').value = '50';
+            document.getElementById('reward-item-emoji').value = '🎁';
+            document.getElementById('reward-item-stock').value = '10';
+            openModal('modal-reward-item');
+        }
+
+        function saveNewReward(e) {
+            e.preventDefault();
+            const name = document.getElementById('reward-item-name').value.trim();
+            const cost = parseInt(document.getElementById('reward-item-cost').value, 10);
+            const emoji = document.getElementById('reward-item-emoji').value.trim() || '🎁';
+            const stock = parseInt(document.getElementById('reward-item-stock').value, 10) || 5;
+
+            if (!name || isNaN(cost)) return;
+
+            rewards.push({
+                id: 'r_' + Date.now(),
+                name,
+                cost,
+                emoji,
+                stock
+            });
+
+            saveState();
+            closeModal('modal-reward-item');
+            renderMarketRewards();
+            showToast('تمت إضافة الهدية لمتجر جنود المسيح بنجاح', 'success');
+        }
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('history-table-body');
+            if (!tbody) return;
+
+            if (historyLog.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-400">لا توجد سجلات بعد</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = historyLog.map(h => {
+                const isAdd = h.type === 'add';
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 text-xs text-slate-500 font-sans">${h.date} - ${h.time}</td>
+                        <td class="py-3 px-4 font-bold text-slate-800 text-xs sm:text-sm">${h.studentName}</td>
+                        <td class="py-3 px-4">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${isAdd ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                                ${isAdd ? 'مكافأة / التزام' : 'استبدال هدية'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-slate-600 text-xs">${h.reason}</td>
+                        <td class="py-3 px-4 font-black ${isAdd ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${isAdd ? '+' : '-'}${h.points} طايو
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function clearHistoryConfirm() {
+            if (confirm("هل أنت متأكد من رغبتك في مسح كل سجل المعاملات؟ لن يتم مسح أرصدة المخدومين.")) {
+                historyLog = [];
+                saveState();
+                renderHistoryTable();
+                showToast('تم إفراغ السجل بنجاح', 'info');
+            }
+        }
+
+        function renderAvatarPicker(selected = '👦') {
+            const container = document.getElementById('avatar-picker');
+            if (!container) return;
+            container.innerHTML = AVATARS.map(a => `
+                <button type="button" onclick="selectAvatar('${a}')" class="text-2xl p-1.5 rounded-xl border text-center transition ${a === selected ? 'border-amber-500 bg-amber-50' : 'border-slate-200 hover:bg-slate-50'}">
+                    ${a}
+                </button>
+            `).join('');
+            document.getElementById('student-avatar').value = selected;
+        }
+
+        function selectAvatar(avatar) {
+            document.getElementById('student-avatar').value = avatar;
+            renderAvatarPicker(avatar);
+        }
+
+        function openNewStudentModal() {
+            document.getElementById('modal-student-title').textContent = 'إضافة ابن في أسرة جنود المسيح';
+            document.getElementById('student-edit-id').value = '';
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-phone').value = '';
+            document.getElementById('student-initial-points').value = '0';
+            renderAvatarPicker('👦');
+            openModal('modal-student');
+        }
+
+        function editStudentModal(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('modal-student-title').textContent = 'تعديل بيانات مخدوم';
+            document.getElementById('student-edit-id').value = student.id;
+            document.getElementById('student-name').value = student.name;
+            document.getElementById('student-stage').value = student.stage;
+            document.getElementById('student-phone').value = student.phone || '';
+            document.getElementById('student-initial-points').value = student.points || 0;
+            renderAvatarPicker(student.avatar || '👦');
+            openModal('modal-student');
+        }
+
+        function saveStudent(e) {
+            e.preventDefault();
+            const editId = document.getElementById('student-edit-id').value;
+            const name = document.getElementById('student-name').value.trim();
+            const stage = document.getElementById('student-stage').value;
+            const avatar = document.getElementById('student-avatar').value || '👦';
+            const phone = document.getElementById('student-phone').value.trim();
+            const points = parseInt(document.getElementById('student-initial-points').value, 10) || 0;
+
+            if (!name) return;
+
+            if (editId) {
+                const st = students.find(s => s.id === editId);
+                if (st) {
+                    st.name = name;
+                    st.stage = stage;
+                    st.avatar = avatar;
+                    st.phone = phone;
+                    st.points = points;
+                }
+                showToast('تم تحديث بيانات الابن بنجاح', 'success');
+            } else {
+                const newStudent = {
+                    id: 's_' + Date.now(),
+                    name,
+                    stage,
+                    avatar,
+                    phone,
+                    points
+                };
+                students.push(newStudent);
+                showToast(`تمت إضافة ${name} لأسرة جنود المسيح`, 'success');
+            }
+
+            saveState();
+            closeModal('modal-student');
+            renderStudentsList();
+            renderDashboard();
+        }
+
+        function deleteStudentConfirm(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            if (confirm(`هل أنت متأكد من حذف الابن "${student.name}" من سجل جنود المسيح؟`)) {
+                students = students.filter(s => s.id !== id);
+                saveState();
+                renderStudentsList();
+                renderDashboard();
+                showToast('تم الحذف بنجاح', 'info');
+            }
+        }
+
+        function openQuickPointsModal(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('quick-student-id').value = student.id;
+            document.getElementById('quick-points-title').textContent = `تعديل رصيد: ${student.name}`;
+            document.getElementById('quick-points-amount').value = '10';
+            document.getElementById('quick-points-desc').value = '';
+            openModal('modal-quick-points');
+        }
+
+        function saveQuickPoints(e) {
+            e.preventDefault();
+            const id = document.getElementById('quick-student-id').value;
+            const type = document.querySelector('input[name="quick_type"]:checked').value;
+            const amount = parseInt(document.getElementById('quick-points-amount').value, 10) || 0;
+            const desc = document.getElementById('quick-points-desc').value.trim() || 'تعديل من خادم إعدادي';
+
+            const student = students.find(s => s.id === id);
+            if (!student || amount <= 0) return;
+
+            if (type === 'add') {
+                student.points = (student.points || 0) + amount;
+            } else {
+                student.points = Math.max(0, (student.points || 0) - amount);
+            }
+
+            historyLog.unshift({
+                id: 'h_' + Date.now(),
+                date: new Date().toLocaleDateString('ar-EG'),
+                time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+                studentId: student.id,
+                studentName: student.name,
+                type: type === 'add' ? 'add' : 'deduct',
+                points: amount,
+                reason: desc
+            });
+
+            saveState();
+            closeModal('modal-quick-points');
+            renderDashboard();
+            renderStudentsList();
+            showToast(`تم ${type === 'add' ? 'إضافة' : 'خصم'} ${amount} طايو لـ ${student.name}`, 'success');
+        }
+
+        function showCertificate(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+
+            document.getElementById('cert-student-name').textContent = student.name;
+            document.getElementById('cert-points').textContent = student.points;
+            document.getElementById('cert-date').textContent = 'التاريخ: ' + new Date().toLocaleDateString('ar-EG');
+
+            openModal('modal-certificate');
+            triggerConfetti();
+        }
+
+        function openModal(id) {
+            document.getElementById(id)?.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id)?.classList.add('hidden');
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+            if (!toast) return;
+
+            toastMsg.textContent = msg;
+            if (type === 'success') {
+                toastIcon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            } else if (type === 'error') {
+                toastIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i>';
+            } else {
+                toastIcon.innerHTML = '<i class="fa-solid fa-circle-info text-amber-400"></i>';
+            }
+
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3200);
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 65,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            updateRoleUI();
+            if (currentRole === 'student') {
+                switchTab('student-portal');
+            } else {
+                switchTab('dashboard');
+            }
+        });
+    </script>
+</body>
+</html>
